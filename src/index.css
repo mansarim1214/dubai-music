@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'Netflix';
+  src: url('http://localhost:3000/fonts/NetflixSans-Medium.otf') format('opentype');
+  src: url('http://localhost:3000/fonts/NetflixSans-Light.otf') format('opentype');
+  src: url('http://localhost:3000/NetflixSans-Bold.otf') format('opentype');
+  src: url('http://localhost:3000/NetflixSans-Regular.otf') format('opentype');
+
+  font-weight: normal;
+ 
+}
+
+body {
+  font-family: 'Netflix', sans-serif !important;
+  margin: 0 !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
