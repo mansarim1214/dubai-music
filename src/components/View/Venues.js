@@ -54,7 +54,7 @@ const Venues = () => {
                 <MultiCarousel responsive={responsive}>
                   {groupedVenues[category].map((venue) => (
                     <div key={venue._id}>
-                      <Link to={`/venue/${venue._id}`}>
+                      <Link to={`/venuedetail/${venue._id}`}>
                         <div className="artistImage">
                           {venue.featuredImage && (
                             <img

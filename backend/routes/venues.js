@@ -90,6 +90,20 @@ router.put('/:id', upload.fields([{ name: 'featuredImage', maxCount: 1 }, { name
 });
 
 
+// GET route to fetch a single venue by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const venue = await Venue.findById(req.params.id); // Find artist by ID
+    if (venue) {
+      res.json(venue); // Respond with the artist object if found
+    } else {
+      res.status(404).json({ message: 'Venue not found' }); // Handle case where Venue ID is not found
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message }); // Handle server or database errors
+  }
+});
+
 // DELETE route to delete a venue by id
 router.delete('/:id', async (req, res) => {
   try {

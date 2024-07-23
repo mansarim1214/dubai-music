@@ -27,7 +27,7 @@ const App = () => {
           <Route path="/artist/:id" element={<ArtistDetail />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/venues" element={<Venues />} />
-          <Route path="/venuedetail" element={<VenueDetail />} />
+          <Route path="/venuedetail/:id" element={<VenueDetail />} />
         </Routes>
         <Footer />
       </div>
