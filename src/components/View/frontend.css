@@ -1,0 +1,253 @@
+html, body{
+overflow-x: hidden;
+}
+
+.mainFront{
+    
+    color: white !important;
+    
+    min-height: 100vh;
+}
+.bg-custom{
+    background-color: #333333 !important;
+    padding: 130px 0;
+    color: white;
+    min-height: 100vh;
+}
+
+.mainFront p{
+    color: #9F9F9F;
+    font-size: 1rem;
+}
+
+.artistImage img{
+    height: 320px;
+    object-fit: cover;
+    object-position: center center;
+    border-radius: 10px;
+    transition: 0.5s ease;
+}
+
+.artistImage img:hover{
+    filter: brightness(70%);
+    
+}
+
+
+
+.artCat, .fav-title{
+    /* background-color: #E60023;
+    background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 62%); */
+    color: white !important;
+    z-index: 999;
+    padding: 6px 20px;
+    font-size: 26px !important;
+    position: relative;
+    margin-left: 10px;
+}
+
+.artCat::before, .fav-title::before{
+    position: absolute !important;
+    content: "" !important;
+    transform: skewX(-30deg);
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    transition: all 0.3s;
+    width: 100%;
+    background: rgb(230,0,0);
+    background: linear-gradient(90deg, rgba(230,0,0,1) 0%, rgba(0,0,0,0) 62%);
+    display: block;
+}
+
+.react-multi-carousel-track {
+    gap: 10px;
+}
+
+.artSection{
+    padding-right: 0px !important;
+    
+}
+
+.react-multiple-carousel__arrow{
+    min-height: 100%;
+    border-radius: 0;
+}
+
+/* ------------ mobile media query start-------------- */
+
+@media only screen and (max-width: 500px) {
+.react-multiple-carousel__arrow{
+ display: none;
+}
+.artCat{
+    font-size: 20px !important;
+}
+.artistImage img, .venueImage img{
+    height: 238px !important;
+}
+.artContent{
+    padding-left: 10px !important;
+}
+.artTitle{
+    font-size: 14px !important;
+}
+.speciality {
+    font-size: 12px !important;
+}
+
+#description{
+    flex-direction: column-reverse;
+}
+
+}
+#description h4{
+    color: #e10101;
+    font-weight: bold;
+    text-decoration: underline;
+}
+#description, .artistForm{
+    background: black;
+    padding: 15px;
+    border-radius: 20px;
+
+}
+
+.artist-video iframe, .artist-image, .venue-image img{
+    border-radius: 15px;
+}
+
+
+/* ------------ mobile media query end-------------- */
+
+/* ------------ DESKTOP media query start-------------- */
+
+@media only screen and (min-width: 1200px) {
+    #description{
+        
+        gap: 50px;
+    }
+    .artist-detail .container, .venue-detail .container{
+        max-width: 950px;
+    }
+}
+    
+    /* ------------ DESKTOP media query end-------------- */
+
+.react-multiple-carousel__arrow--right{
+    right: 0;
+}
+
+.react-multiple-carousel__arrow--left{
+    left: 0;
+}
+
+.artistImage{
+    position: relative;
+}
+
+.artContent{
+    position: absolute;
+    bottom: 0;
+    padding: 5px 10px 5px 20px;
+    background-image: linear-gradient(132deg, #000000BF 17%, #00000000 100%);
+    width: 100%;
+    margin-bottom: 0;
+    border-radius: 0 0px 0 10px;
+}
+
+.artTitle{
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+    color: white;
+}
+.speciality{
+    font-size: 14px;
+    color: #f749f8;
+
+}
+
+
+.artist-detail {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .artist-detail .col-md-6 {
+    flex: 1;
+    min-width: 50%;
+    box-sizing: border-box;
+  }
+  
+  .artist-detail img, .venue-detail img {
+    width: 100%;
+   
+  }
+  
+  .artist-detail span, .venue-detail span{
+    color: #e60023;
+  }
+
+  .artist-detail h1, .venue-detail h1{
+    font-size: 26px;
+    position: relative;
+    z-index: 999;
+    padding: 6px 20px;
+  }
+
+  .artist-detail h1:before, .venue-detail h1::before{
+    
+    
+    position: absolute !important;
+    content: "" !important;
+    transform: skewX(-30deg);
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    transition: all 0.3s;
+    width: 100%;
+    background: rgb(230,0,0);
+    background: linear-gradient(90deg, rgba(230,0,0,1) 0%, rgba(0,0,0,0) 62%);
+    display: block;
+
+
+  }
+
+  a{
+    color: #e60023 !important;
+    
+  }
+
+  .favorite{
+    position: absolute;
+    z-index: 1;
+    font-size: 23px;
+    left: 11px;
+    cursor: pointer;
+  }
+
+  .favorite svg{
+    fill: #ffffff80;
+    stroke-width: 1px;
+    stroke: #ff0000;
+    overflow: visible;
+  }
+
+  .favorited svg{
+    fill: red;
+    stroke: #e60023;
+  }
+
+  .no-gutter{
+    padding-right: 0px !important;
+  }
+
+  .enquirybtn{
+    width: 100%;
+    background-color: #e60023 !important;
+  }
+
+ 
