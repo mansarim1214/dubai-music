@@ -25,12 +25,15 @@ const ViewArtists = () => {
 
   useEffect(() => {
     // Filter artists based on search term
-    const filtered = artists.filter(
-      (artist) =>
-        artist.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        artist.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        artist.speciality.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filtered = artists.filter((artist) => {
+      const title = artist.title ? artist.title.toLowerCase() : '';
+      const category = artist.category ? artist.category.toLowerCase() : '';
+      const speciality = artist.speciality ? artist.speciality.toLowerCase() : '';
+      const search = searchTerm.toLowerCase();
+    
+      return title.includes(search) || category.includes(search) || speciality.includes(search);
+    });
+    
     setFilteredArtists(filtered);
   }, [searchTerm, artists]);
 
@@ -108,10 +111,11 @@ const ViewArtists = () => {
         </div>
       </form>
         
-        <table className="table">
+        <table className="table table-responsive" width={'100%'}>
           <thead>
             <tr>
               <th>Name</th>
+              <th>Status</th>
               <th>Category</th>
               <th>Speciality</th>
               <th>Description</th>
@@ -124,6 +128,7 @@ const ViewArtists = () => {
             {filteredArtists.map((artist) => (
               <tr key={artist._id}>
                 <td>{artist.title}</td>
+                <td>{artist.isPublished}</td>
                 <td>{artist.category}</td>
                 <td>{artist.speciality}</td>
                 <td>{artist.description}</td>

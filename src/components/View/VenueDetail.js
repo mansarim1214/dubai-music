@@ -1,161 +1,193 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import emailjs from "emailjs-com";
+import { useParams, useNavigate } from "react-router-dom";
+import { Gallery, Item } from "react-photoswipe-gallery";
+import "photoswipe/dist/photoswipe.css";
+import { FaWhatsapp } from "react-icons/fa";
+import "./frontend.css"; // Import the CSS file for styling
 
-const VenueDetail = () => {
+const BsArrowLeftSquareFill = React.lazy(() =>
+  import("react-icons/bs").then((module) => ({ default: module.BsArrowLeftSquareFill }))
+);
+const BsTelephone = React.lazy(() =>
+  import("react-icons/bs").then((module) => ({ default: module.BsTelephone }))
+);
+
+const VenueDetail = ({ onNavigate }) => {
   const { id } = useParams();
   const [venue, setVenue] = useState(null);
-  const [loading, setLoading] = useState(true); // Track loading state
-  const [error, setError] = useState(null); // Track error state
-  const [formData, setFormData] = useState({ name: "", phone: "", email: "" });
-  const [formMessage, setFormMessage] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [galleryImages, setGalleryImages] = useState([]);
+  const [progress, setProgress] = useState(0);
+
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    setProgress(50);
+
+    if (onNavigate) {
+      onNavigate(`/venues`);
+    }
+  };
 
   useEffect(() => {
     const fetchVenue = async () => {
+      setProgress(30);
       try {
-        console.log(`Fetching venue with ID: ${id}`); // Debug log
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/venues/${id}`
         );
-        console.log('Fetched venue data:', response.data); // Debug log
         setVenue(response.data);
-        setLoading(false); // Set loading to false on successful data fetch
+        setLoading(false);
+
+        // Load images to get their dimensions
+        const imagePromises = response.data.gallery.map(async (img) => {
+          const src = `${process.env.REACT_APP_API_URL}/${img}`;
+          return new Promise((resolve) => {
+            const image = new Image();
+            image.src = src;
+            image.onload = () =>
+              resolve({ src, width: image.width, height: image.height });
+          });
+        });
+
+        const loadedImages = await Promise.all(imagePromises);
+        setGalleryImages(loadedImages);
       } catch (error) {
-        console.error('Error fetching venue:', error);
-        setError('Failed to fetch venue. Please try again later.'); // Update error state
-        setLoading(false); // Set loading to false on error
+        console.error("Error fetching venue:", error);
+        setError("Failed to fetch venue. Please try again later.");
+      } finally {
+        setProgress(100);
+        setLoading(false);
       }
     };
 
     fetchVenue();
   }, [id]);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const whatsappShareUrl = `https://api.whatsapp.com/send?text=Check out this: ${window.location.href}`;
+
+  const addTargetToLinks = (html) => {
+    return html.replace(
+      /<a /g,
+      '<a target="_blank" rel="noopener noreferrer" '
+    );
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const templateParams = {
-      name: formData.name,
-      phone: formData.phone,
-      email: formData.email,
-      venueName: venue?.title, // Ensure venue name is included
-    };
-
-    emailjs
-      .send(
-        "service_3hkljmf",
-        "template_hg6yimn",
-        templateParams,
-        "q1l_DC7jwQvu80xJ5"
-      )
-      .then((response) => {
-        setFormMessage("Booking request sent successfully!");
-        setFormData({ name: "", phone: "", email: "" });
-      })
-      .catch((error) => {
-        setFormMessage("Failed to send booking request. Please try again.");
-        console.error("Error sending booking request:", error);
-      });
-  };
-
-  if (loading) return <div>Loading...</div>; // Show loading indicator
-
-  if (error) return <div>Error: {error}</div>; // Show error message if fetch fails
-
-  if (!venue) return <div>No venue found.</div>; // Handle case when venue is null
 
   return (
     <div className="venue-detail bg-custom">
-      <div className='container'>
-        {venue.featuredImage && (
-          <div className="venue-image">
-            <img
-              src={`${process.env.REACT_APP_API_URL}/${venue.featuredImage}`}
-              alt={venue.title}
-              width="100%"
-            />
-          </div>
-        )}
-        <h1>{venue.title}</h1>
-        <div>Category: <span>{venue.category}</span></div>
-        <div>Location: <span>{venue.location}</span></div>
+      <div className="container">
+        {/* Static Content */}
+        <Suspense fallback={<div>Loading Back Button...</div>}>
+          <span onClick={handleBack} className="back-btn">
+            <BsArrowLeftSquareFill size={30} className="my-2" />
+          </span>
+        </Suspense>
 
-        <div className='row mt-3' id='description'>
-          <div className='col-md-6'>
-            <div dangerouslySetInnerHTML={{ __html: venue.description || '<em>Description not available yet</em>' }} />
-          </div>
-          <div className='col-md-5'>
-            {venue.gallery && venue.gallery.length > 0 && (
-              <div className="venue-gallery">
-                {venue.gallery.map((image, index) => (
-                  <img key={index} src={`${process.env.REACT_APP_API_URL}/${image}`} alt={`Gallery ${index + 1}`} className="mb-2" />
-                ))}
+        <h1>{loading ? "" : venue?.title}</h1>
+
+        <div>
+          Location:{" "}
+          <span>{loading ? "" : venue?.location || "N/A"}</span>
+        </div>
+
+        {/* Dynamic Content */}
+        {!loading && !error && venue && (
+          <>
+            <div id="description" className="mt-3">
+              <div className="row">
+                <div
+                  className={`col-md-${
+                    galleryImages.length || venue.featuredImage ? "6" : "12"
+                  }`}
+                >
+                  <h4>About</h4>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        addTargetToLinks(venue.description) ||
+                        "<em>Description not available yet</em>",
+                    }}
+                  />
+
+                  <div className="whatsapp-share my-5">
+                    <a
+                      href={whatsappShareUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-success"
+                    >
+                      <FaWhatsapp /> Share with Friends
+                    </a>
+                  </div>
+                </div>
+
+                {(galleryImages.length || venue.featuredImage) && (
+                  <div className={`col-md-${venue.featuredImage ? "6" : "12"}`}>
+                    {venue.featuredImage && (
+                      <img
+                        src={`${process.env.REACT_APP_API_URL}/${venue.featuredImage}`}
+                        alt={venue.title}
+                        className="venue-image mb-2"
+                        style={{ width: "100%", height: "auto" }}
+                        loading="lazy"
+                      />
+                    )}
+                    {galleryImages.length > 0 && (
+                      <div className="gallery-container">
+                        <h4>Gallery</h4>
+                        <Gallery>
+                          <div className="grid-container">
+                            {galleryImages.map((img, index) => (
+                              <Item
+                                key={index}
+                                original={img.src}
+                                thumbnail={img.src}
+                                width={img.width}
+                                height={img.height}
+                              >
+                                {({ ref, open }) => (
+                                  <img
+                                    ref={ref}
+                                    onClick={open}
+                                    src={img.src}
+                                    alt={`galleryimg ${index + 1}`}
+                                    className="grid-item"
+                                    style={{ cursor: "pointer" }}
+                                    loading="lazy"
+                                  />
+                                )}
+                              </Item>
+                            ))}
+                          </div>
+                        </Gallery>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {venue.contact && (
+              <div className="venueForm mt-3">
+                <div className="my-2">
+                  <h1>Contact Venue</h1>
+                  <a
+                    href={`tel:${venue.contact}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn btn-call"
+                  >
+                    <BsTelephone /> Call Now
+                  </a>
+                </div>
               </div>
             )}
-          </div>
-        </div>
+          </>
+        )}
 
-        <div className="artistForm mt-3">
-          <h1 className="mx-2 my-2">Book this Venue</h1>
-          <form onSubmit={handleSubmit}>
-            <div className="row">
-              <div className="col-md-6">
-                <div className="form-group">
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    className="form-control"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    placeholder="Your Name"
-                  />
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="form-group">
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    className="form-control"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    required
-                    placeholder="Phone Number"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-md-6">
-                <div className="form-group">
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    className="form-control"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    placeholder="Your Email"
-                  />
-                </div>
-              </div>
-              <div className="col-md-6">
-                <button type="submit" className="btn btn-danger enquirybtn">
-                  Enquire Now
-                </button>
-              </div>
-            </div>
-          </form>
-          {formMessage && <p className="form-message">{formMessage}</p>}
-        </div>
+        {error && <div>Error: {error}</div>}
       </div>
     </div>
   );

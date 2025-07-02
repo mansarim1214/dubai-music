@@ -110,6 +110,7 @@ const ManageVenue = () => {
                 <th>Title</th>
                 <th>Category</th>
                 <th>Location</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -119,6 +120,7 @@ const ManageVenue = () => {
                   <td>{venue.title}</td>
                   <td>{venue.category}</td>
                   <td>{venue.location}</td>
+                  <td>{venue.status}</td>
                   <td>
                     <button
                       className="btn btn-warning mr-2"

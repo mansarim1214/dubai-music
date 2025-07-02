@@ -1,13 +1,13 @@
-@font-face {
+/* @font-face {
   font-family: 'Netflix';
-  src: url('http://localhost:3000/fonts/NetflixSans-Medium.otf') format('opentype');
-  src: url('http://localhost:3000/fonts/NetflixSans-Light.otf') format('opentype');
-  src: url('http://localhost:3000/NetflixSans-Bold.otf') format('opentype');
-  src: url('http://localhost:3000/NetflixSans-Regular.otf') format('opentype');
+  src: url('/fonts/NetflixSans-Medium.woff2') format('woff2');
+  src: url('/fonts/NetflixSans-Light.woff2') format('woff2');
+  src: url('/NetflixSans-Bold.woff2') format('woff2');
+  src: url('/NetflixSans-Regular.woff2') format('woff2');
 
   font-weight: normal;
  
-}
+} */
 
 body {
   font-family: 'Netflix', sans-serif !important;

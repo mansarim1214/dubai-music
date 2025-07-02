@@ -3,22 +3,35 @@ import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
-
 const AddArtistForm = () => {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [speciality, setSpeciality] = useState("");
   const [description, setDescription] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
-  const [image, setImage] = useState(null);
+  const [audioUrl, setAudioUrl] = useState("");
   const [fileName, setFileName] = useState("No file chosen");
   const [categories, setCategories] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
+  const [galleryFileNames, setGalleryFileNames] = useState([]);
+  const [mainImageFile, setMainImageFile] = useState(null);
+  const [galleryImageFiles, setGalleryImageFiles] = useState([]);
+  const [isPublished, setIsPublished] = useState(false);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setImage(file);
+    setMainImageFile(file);
     setFileName(file ? file.name : "No file chosen");
+  };
+
+  const handleGalleryChange = (e) => {
+    const files = Array.from(e.target.files);
+    setGalleryImageFiles(files);
+    setGalleryFileNames(files.map((file) => file.name));
+  };
+
+  const handleStatusToggle = () => {
+    setIsPublished((prev) => !prev);
   };
 
   const handleSubmit = async (event) => {
@@ -30,7 +43,13 @@ const AddArtistForm = () => {
     formData.append("speciality", speciality);
     formData.append("description", description);
     formData.append("videoUrl", videoUrl);
-    formData.append("image", image);
+    formData.append("audioUrl", audioUrl);
+    formData.append("image", mainImageFile);
+    formData.append("isPublished", isPublished ? "published" : "draft"); // Set published status
+
+    galleryImageFiles.forEach((file) => {
+      formData.append("galleryImages", file);
+    });
 
     try {
       const response = await axios.post(
@@ -43,7 +62,6 @@ const AddArtistForm = () => {
         }
       );
       console.log("Artist created:", response.data);
-      // Show Bootstrap alert
       setShowAlert(true);
       // Reset form fields
       setTitle("");
@@ -51,8 +69,12 @@ const AddArtistForm = () => {
       setSpeciality("");
       setDescription("");
       setVideoUrl("");
-      setImage(null);
+      setAudioUrl("");
+      setMainImageFile(null);
+      setGalleryImageFiles([]);
       setFileName("No file chosen");
+      setGalleryFileNames([]);
+      setIsPublished(false); // Reset published status
     } catch (error) {
       console.error("Error creating artist:", error);
     }
@@ -73,8 +95,6 @@ const AddArtistForm = () => {
     fetchCategories();
   }, []);
 
-
-  
   return (
     <>
       <h3>Add New Artist</h3>
@@ -109,7 +129,7 @@ const AddArtistForm = () => {
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="name">Speciality</label>
+          <label htmlFor="speciality">Speciality</label>
           <input
             type="text"
             className="form-control"
@@ -142,7 +162,18 @@ const AddArtistForm = () => {
             id="videoUrl"
             value={videoUrl}
             onChange={(e) => setVideoUrl(e.target.value)}
-            placeholder="Enter video URL" required
+            placeholder="Enter video URL"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="audioUrl">Audio URL</label>
+          <input
+            type="text"
+            className="form-control"
+            id="audioUrl"
+            value={audioUrl}
+            onChange={(e) => setAudioUrl(e.target.value)}
+            placeholder="Enter audio URL"
           />
         </div>
         <div className="form-group">
@@ -151,7 +182,8 @@ const AddArtistForm = () => {
             <input
               type="file"
               className="form-control-file"
-              id="image" required
+              id="image"
+              required
               onChange={handleFileChange}
             />
             <button
@@ -164,6 +196,45 @@ const AddArtistForm = () => {
             <span id="file-name">{fileName}</span>
           </div>
         </div>
+        <div className="form-group">
+          <label htmlFor="gallery">Artist Gallery</label>
+          <div className="custom-file-input-wrapper">
+            <input
+              type="file"
+              className="form-control-file"
+              id="gallery"
+              multiple
+              onChange={handleGalleryChange}
+            />
+            <button
+              type="button"
+              className="btn btn-dark"
+              onClick={() => document.getElementById("gallery").click()}
+            >
+              Upload Gallery Images
+            </button>
+            <span id="file-name">
+              {galleryFileNames.join(", ") || "No files chosen"}
+            </span>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label>Status</label>
+          <div className="custom-switch">
+            <input
+              type="checkbox"
+              id="statusSwitch"
+              checked={isPublished}
+              onChange={handleStatusToggle}
+            />
+            <label className="slider" htmlFor="statusSwitch"></label>
+            <span className="custom-switch-label">
+              {isPublished ? 'Published' : 'Draft'}
+            </span>
+          </div>
+        </div>
+
         {showAlert && (
           <div
             className="alert alert-success alert-dismissible fade show"
@@ -186,6 +257,9 @@ const AddArtistForm = () => {
     </>
   );
 };
+
+export default AddArtistForm;
+
 
 const AddCategoryForm = () => {
   const [categoryName, setCategoryName] = useState("");

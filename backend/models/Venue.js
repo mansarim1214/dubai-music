@@ -1,17 +1,16 @@
 const mongoose = require('mongoose');
 
-const venueSchema = new mongoose.Schema({
-
-  title: { type: String, required: true },
-  category: { type: String, required: true },
-  location: { type: String, required: true },
+const VenueSchema = new mongoose.Schema({
+  title: { type: String},
   description: { type: String },
-  featuredImage: { type: String, required: true },
-  gallery: { type: [String], required: false },
-});
+  location: { type: String },
+  category: { type: String },
+  featuredImage: { type: String },
+  gallery: { type: [String], default: [] },
+  contact: { type: String },
+  status: { type: String, default: 'published' },
+  orderNumber: { type: String, default: '0' },
+  createdAt: {type: Date}
+}, { Timestamp: true }); // This enables the `createdAt` and `updatedAt` fields
 
-
-
-const Venue = mongoose.model('Venue', venueSchema);
-
-module.exports = Venue;
+module.exports = mongoose.model('Venue', VenueSchema);

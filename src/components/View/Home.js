@@ -1,30 +1,81 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { Link } from "react-router-dom";
+import { BsHeartFill  } from "react-icons/bs";
+import { BsChevronCompactRight, BsChevronCompactLeft } from "react-icons/bs";
+import { gsap } from "gsap";
+import { Draggable } from "gsap/Draggable";
 import axios from "axios";
-import MultiCarousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import { Link } from 'react-router-dom';
-import { BsHeartFill } from "react-icons/bs";
 import "./frontend.css";
+
+gsap.registerPlugin(Draggable);
 
 const Home = () => {
   const [categories, setCategories] = useState([]);
   const [artistsByCategory, setArtistsByCategory] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [favorites, setFavorites] = useState([]);
+  const [showArrows, setShowArrows] = useState({ left: false, right: false });
+  const carouselRefs = useRef([]);
 
-  // console.log('API URL:', process.env.REACT_APP_API_URL);
+  const manualArtistOrder = {
+    Singers: [
+      "Jerome Deligero",
+      "Emily Peacock",
+      "Toi Dupras",
+      "Yvonne Park",
+      "Matt Palmer",
+      "Lina Ammor- Jevtic",
+      "Eirini Devitt",
+      "Juan Pablo Pellicer",
+      "Nick Pritchard",
+      "Mostafa Sattar",
+      "Jin Flora",
+      "Robbi McFaulds",
+    ],
+    DJ: ["Dadou", "Elena", "Yana Kulyk", "Raphy J", "DJ Stylez", "DJ Melyna"],
+    Musicians: [
+      "Ksenia Kot",
+      "Jose Ramon Nunez",
+      "Soren Lyng Hansen",
+      "Tatiana Durova",
+      "Aleksandra Dudek",
+      "Ulyana Goncharova",
+    ],
+    Trending: [
+      "Carrie Gibson’s NuvoSoul",
+      "Jaymie Deville",
+      "Chelsey Chantelle",
+      "Golden Collective",
+      "Abdallah Seleem",
+      "Dany Echemendia",
+      "Marvin Lee",
+    ],
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const categoriesResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/categories`);
+        const categoriesResponse = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/categories`
+        );
         const fetchedCategories = categoriesResponse.data;
-
-        const artistsResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/artists`);
+  
+        const artistsResponse = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/artists`
+        );
         const fetchedArtists = artistsResponse.data;
-
-        const desiredOrder = ['Trending', 'Singers', 'Band', 'DJ', 'Musicians'];
-
-        fetchedCategories.sort((a, b) => {
+  
+        // Define the desired order
+        const desiredOrder = [
+          "Trending",
+          "Singers",
+          "Solo Looping Artists",
+          "Band",
+          "DJ",
+          "Musicians",
+        ];
+  
+        // Sort categories based on desiredOrder
+        const sortedCategories = fetchedCategories.sort((a, b) => {
           const aIndex = desiredOrder.indexOf(a.name);
           const bIndex = desiredOrder.indexOf(b.name);
           if (aIndex === -1 && bIndex === -1) return 0;
@@ -32,119 +83,237 @@ const Home = () => {
           if (bIndex === -1) return -1;
           return aIndex - bIndex;
         });
-
-        const storedFavorites = JSON.parse(localStorage.getItem('favoriteArtists')) || {};
+  
+        // Load favorites from localStorage
+        const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+        
+        // Ensure favorites are marked correctly
         const groupedArtists = {};
-        fetchedCategories.forEach((category) => {
-          groupedArtists[category.name] = fetchedArtists
+  
+        sortedCategories.forEach((category) => {
+          let sortedArtists = fetchedArtists
             .filter((artist) => artist.category === category.name)
             .map((artist) => ({
               ...artist,
-              isFavorite: storedFavorites[artist._id] || false,
+              isFavorite: storedFavorites.some((fav) => fav._id === artist._id),
             }));
+  
+          const order = manualArtistOrder[category.name];
+          if (order) {
+            // Sort based on manualArtistOrder
+            const sortedByManualOrder = sortedArtists
+              .filter((artist) => order.includes(artist.title))
+              .sort((a, b) => order.indexOf(a.title) - order.indexOf(b.title));
+  
+            // Add artists not in the manualArtistOrder at the end
+            const remainingArtists = sortedArtists.filter(
+              (artist) => !order.includes(artist.title)
+            );
+  
+            sortedArtists = [...sortedByManualOrder, ...remainingArtists];
+          }
+  
+          groupedArtists[category.name] = sortedArtists;
         });
-
-        setCategories(fetchedCategories);
+  
+        // Update state with sorted categories and artists
+        setCategories(sortedCategories);
         setArtistsByCategory(groupedArtists);
-        setLoading(false);
+        setFavorites(storedFavorites);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError("Error fetching data. Please try again later.");
-        setLoading(false);
       }
     };
-
+  
     fetchData();
   }, []);
+  
+  
+  
 
-  const toggleFavorite = (artistId) => {
-    const updatedArtistsByCategory = { ...artistsByCategory };
-    let isFavorite = false;
+  useEffect(() => {
+    if (carouselRefs.current.length > 0) {
+      const updateArrowVisibility = () => {
+        carouselRefs.current.forEach((carousel, index) => {
+          if (carousel) {
+            const scrollWidth = carousel.scrollWidth;
+            const clientWidth = carousel.clientWidth;
+            const scrollLeft = carousel.scrollLeft;
 
-    // Update local state
-    Object.keys(updatedArtistsByCategory).forEach((category) => {
-      updatedArtistsByCategory[category] = updatedArtistsByCategory[category].map((artist) => {
-        if (artist._id === artistId) {
-          isFavorite = !artist.isFavorite;
-          return { ...artist, isFavorite };
-        }
-        return artist;
-      });
-    });
+            setShowArrows((prev) => ({
+              ...prev,
+              [index]: {
+                left: scrollLeft > 0,
+                right: scrollLeft < scrollWidth - clientWidth,
+              }
+            }));
+          }
+        });
+      };
 
-    setArtistsByCategory(updatedArtistsByCategory);
+      updateArrowVisibility(); // Initial check
 
-    // Update localStorage
-    const favoriteArtists = JSON.parse(localStorage.getItem('favoriteArtists')) || {};
-    if (isFavorite) {
-      favoriteArtists[artistId] = true;
-    } else {
-      delete favoriteArtists[artistId];
+      window.addEventListener("resize", updateArrowVisibility);
+      return () => window.removeEventListener("resize", updateArrowVisibility);
     }
-    localStorage.setItem('favoriteArtists', JSON.stringify(favoriteArtists));
+  }, [artistsByCategory, favorites]);
+
+  useEffect(() => {
+    if (window.innerWidth <= 500 && carouselRefs.current.length > 0) {
+      carouselRefs.current.forEach((carousel) => {
+        if (carousel) {
+          gsap.killTweensOf(carousel);
+
+          Draggable.create(carousel, {
+            type: "x",
+            bounds: {
+              minX: -carousel.scrollWidth + carousel.clientWidth,
+              maxX: 0,
+            },
+            inertia: true,
+            throwProps: true,
+            edgeResistance: 0.65,
+            onThrowUpdate: () => {
+              gsap.to(carousel, { x: carousel._gsap.x, ease: "power2.out" });
+            },
+            snap: {
+              x: (value) => Math.round(value / 16.67) * 200, // Adjust based on item width
+            },
+          });
+        }
+      });
+    }
+  }, [artistsByCategory, favorites]);
+
+  const toggleFavorite = (artist) => {
+    // Get the current favorites from localStorage
+    const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+  
+    // Check if the artist is already in favorites
+    const isAlreadyFavorite = savedFavorites.some((fav) => fav._id === artist._id);
+  
+    // Update favorites based on whether the artist is already a favorite
+    const updatedFavorites = isAlreadyFavorite
+      ? savedFavorites.filter((fav) => fav._id !== artist._id)
+      : [...savedFavorites, artist];
+  
+    // Update state and localStorage
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+  
+
+  const isFavorite = (artist) => {
+    return favorites.some((fav) => fav._id === artist._id);
   };
 
-  const responsive = {
-    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 6 },
-    tablet: { breakpoint: { max: 1024, min: 464 }, items: 3 },
-    mobile: { breakpoint: { max: 464, min: 0 }, items: 2 },
+  const scrollCarousel = (direction, index) => {
+    const carousel = carouselRefs.current[index];
+    if (carousel) {
+      // Assuming each slide is 16.67% of the carousel width
+      const slideWidth = carousel.clientWidth / 6; // Adjust the denominator based on the number of visible slides
+      const scrollAmount = slideWidth * 3 * direction; // Scroll by 3 slides
+  
+      carousel.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
+  
+      setTimeout(() => {
+        const scrollWidth = carousel.scrollWidth;
+        const clientWidth = carousel.clientWidth;
+        const scrollLeft = carousel.scrollLeft;
+  
+        setShowArrows((prev) => ({
+          ...prev,
+          [index]: {
+            left: scrollLeft > 0,
+            right: scrollLeft < scrollWidth - clientWidth,
+          },
+        }));
+      }, 500); // Delay to allow smooth scrolling to update visibility
+    }
   };
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  
 
   return (
-    <div className="mainFront bg-custom">
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-md-7 main-text mb-5">
-            <h3>Welcome to Dubai Music</h3>
-            <p className="mt-3">
-              Dubai Music is a hub featuring the city’s best singers and musicians. Explore the artists below and use our directory to hire singers and musicians in Dubai for your events.
-            </p>
-          </div>
-
-          {categories.filter(
+    <div className="mainFront">
+      <div className="container-fluid" id="explore">
+        {categories
+          .filter(
             (category) =>
               artistsByCategory[category.name] &&
               artistsByCategory[category.name].length > 0
-          ).map((category) => (
+          )
+          .map((category, index) => (
             <section key={category._id} className="artSection">
-              <h2 className="artCat my-3">{category.name}</h2>
-              <div className="artistCarousel">
-                <MultiCarousel responsive={responsive}>
-                  {artistsByCategory[category.name]?.map((artist) => (
-                    <div key={artist._id}>
-                      <span
-                        className={`favorite ${artist.isFavorite ? 'favorited' : ''}`}
-                        onClick={() => toggleFavorite(artist._id)}
-                        style={{ color: artist.isFavorite ? 'red' : 'grey' }}
-                      >
-                        <BsHeartFill />
-                      </span>
-                      <Link to={`/artist/${artist._id}`}>
-                        <div className="artistImage">
-                          {artist.imageUrl && (
-                            <img
-                              src={`${process.env.REACT_APP_API_URL}/${artist.imageUrl}`}
-                              alt={artist.title}
-                              width="100%"
-                              loading="lazy"
-                            />
-                          )}
-                          <div className="artContent">
-                            <h4 className="artTitle">{artist.title}</h4>
-                            <span className="speciality">{artist.speciality}</span>
-                          </div>
+              <h2 className="my-2 artCat">{category.name}</h2>
+              {showArrows[index]?.left && (
+                <button
+                  className="arrow left react-multiple-carousel__arrow"
+                  onClick={() => scrollCarousel(-1, index)} // Scroll left
+                >
+                  <BsChevronCompactLeft />
+                </button>
+              )}
+              <div
+                className="artistCarousel"
+                ref={(el) => (carouselRefs.current[index] = el)}
+                style={{
+                  display: "flex",
+                  overflow: "hidden",
+                  width: "100%",
+                }}
+              >
+                {artistsByCategory[category.name]?.map((artist) => (
+                  <div
+                    key={artist._id}
+                    className="artistImage"
+                    style={{
+                      flex: "0 0 16.67%",
+                      boxSizing: "border-box",
+                      padding: "0 5px",
+                    }}
+                  >
+                    <Link to={`/artist/${artist._id}`}>
+                      <div className="artistImage">
+                        {artist.imageUrl && (
+                          <img
+                            src={`${process.env.REACT_APP_API_URL}/${artist.imageUrl}`}
+                            alt={artist.title}
+                            width="100%"
+                            loading="lazy"
+                          />
+                        )}
+                        <div className="artContent">
+                          <h4 className="artTitle">{artist.title}</h4>
                         </div>
-                      </Link>
+                      </div>
+                    </Link>
+
+                    {/* Add heart icon here */}
+                    <div className="favoriteIcon">
+                      <button onClick={() => toggleFavorite(artist)}>
+                        {isFavorite(artist) ? (
+                          <BsHeartFill  className=" favorited" />
+                        ) : (
+                          <BsHeartFill className="heartIcon " />
+                        )}
+                      </button>
                     </div>
-                  ))}
-                </MultiCarousel>
+                  </div>
+                ))}
               </div>
+              {showArrows[index]?.right && (
+                <button
+                  className="arrow right react-multiple-carousel__arrow"
+                  onClick={() => scrollCarousel(1, index)} // Scroll right
+                >
+                  <BsChevronCompactRight />
+                </button>
+              )}
             </section>
           ))}
-        </div>
       </div>
     </div>
   );
