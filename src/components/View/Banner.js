@@ -125,7 +125,7 @@ const Banner = () => {
           ></span>
         ))}
       </div>
-      <style jsx>{`
+      <style>{`
         .carousel-arrow {
           position: absolute;
           top: 50%;

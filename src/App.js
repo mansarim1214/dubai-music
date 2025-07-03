@@ -8,6 +8,11 @@ import LoadingBar from "react-top-loading-bar";
 import "./App.css";
 import "./index.css";
 
+import CacheBuster from 'react-cache-buster';
+import pkg from '../package.json';
+const version = pkg.version;
+// import Loading from './loading';
+
 // Lazy-loaded components
 const Musicians = React.lazy(() => import("./components/View/Musicians"));
 const Dashboard = React.lazy(() => import("./components/Dashboard/Dashboard"));
@@ -57,7 +62,16 @@ const App = () => {
     }, 500); // Simulate loading completion
   }, [location.pathname]); // Run whenever the path changes (includes reloads)
 
+const isProduction = process.env.NODE_ENV === 'production';
+
   return (
+     <CacheBuster
+      currentVersion={version}
+      isEnabled={isProduction} //If false, the library is disabled.
+      isVerboseMode={false} //If true, the library writes verbose logs to console.
+      // loadingComponent={<Loading />} //If not pass, nothing appears at the time of new version check.
+      metaFileDirectory={'.'} //If public assets are hosted somewhere other than root on your server.
+    >
     <AuthProvider>
       <div className="App">
         {/* Top Loading Bar */}
@@ -102,6 +116,8 @@ const App = () => {
         {showHeaderFooter && <Footer />}
       </div>
     </AuthProvider>
+
+    </CacheBuster>
   );
 };
 
