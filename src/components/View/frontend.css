@@ -697,6 +697,7 @@ body.coming-soon-page footer {
   flex: 0 0 100%;
   text-align: center;
   position: relative;
+  background-color: #0d0d0d;
 }
 
 .carousel-slide img {
@@ -704,6 +705,15 @@ body.coming-soon-page footer {
   height: 550px; /* Default height for larger screens */
   object-fit: cover;
   object-position: top;
+}
+
+.carousel-slide .contain{
+  object-fit: contain;
+ 
+}
+
+.carousel-slide .custom{
+  top:75%;
 }
 .carousel-slide .center {
   object-position: center;

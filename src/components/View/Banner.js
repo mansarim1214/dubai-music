@@ -38,7 +38,15 @@ const Banner = () => {
       button: 'View Store',
       url: '/music-store/67afa3372272627033bafded',
     },
-
+{
+      src: '/banner7.webp',
+      alt: 'Banner for Introducing Series',
+      // text: 'Discover Live Music Venues',
+      button: 'Explore Now',
+      url: '/introducing-series',
+      class: 'contain',
+      btnClass:'custom',
+},  
 {
       src: '/banner2.webp',
       alt: 'Banner for Venues',
@@ -68,7 +76,7 @@ const Banner = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       handleNext();
-    }, 4000);
+    }, 6000);
 
     return () => clearInterval(interval);
   }, [currentIndex]);
@@ -101,7 +109,7 @@ const Banner = () => {
           <div key={index} className="carousel-slide">
             <img src={slide.src} alt={slide.alt} className={slide.class} />
             <h1 className="carousel-text">{slide.text}</h1>
-            <a href={slide.url} className="carousel-btn enquirybtn">
+            <a href={slide.url} className={`${slide.btnClass} carousel-btn enquirybtn`}>
               {slide.button}
             </a>
           </div>
