@@ -13,6 +13,7 @@ const IntSeriesList = ({ onNavigate }) => {
   const [intSeriesList, setIntSeriesList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showArrows, setShowArrows] = useState({ left: false, right: true });
   const carouselRefs = useRef([]);
 
   useEffect(() => {
@@ -30,6 +31,47 @@ const IntSeriesList = ({ onNavigate }) => {
 
     fetchIntSeries();
   }, []);
+
+  useEffect(() => {
+    const carousel = carouselRefs.current[0];
+    if (carousel) {
+      const updateArrowVisibility = () => {
+        const scrollWidth = carousel.scrollWidth;
+        const clientWidth = carousel.clientWidth;
+        const scrollLeft = carousel.scrollLeft;
+
+        setShowArrows({
+          left: scrollLeft > 0,
+          right: scrollLeft < scrollWidth - clientWidth,
+        });
+      };
+
+      updateArrowVisibility();
+      window.addEventListener("resize", updateArrowVisibility);
+      return () => window.removeEventListener("resize", updateArrowVisibility);
+    }
+  }, [intSeriesList]);
+
+  useEffect(() => {
+    const carousel = carouselRefs.current[0];
+    if (window.innerWidth <= 500 && carousel) {
+      gsap.killTweensOf(carousel);
+
+      Draggable.create(carousel, {
+        type: "x",
+        bounds: {
+          minX: -carousel.scrollWidth + carousel.clientWidth,
+          maxX: 0,
+        },
+        inertia: true,
+        throwProps: true,
+        edgeResistance: 0.65,
+        onThrowUpdate: () => {
+          gsap.to(carousel, { x: carousel._gsap.x, ease: "power2.out" });
+        },
+      });
+    }
+  }, [intSeriesList]);
 
   const scrollCarousel = (direction, index) => {
     const carousel = carouselRefs.current[index];
@@ -63,21 +105,21 @@ const IntSeriesList = ({ onNavigate }) => {
 
   return (
     <div className="bg-custom">
-     
       <div className="container-fluid p-0">
         <div className="category-wrapper">
           <h2 className="my-4 fav-title">Introducing Series</h2>
           <hr />
           <div className="row">
             <div className="col p-relative">
+              {showArrows.left && (
+                <button className="arrow left react-multiple-carousel__arrow" onClick={() => scrollCarousel(-1, 0)}>
+                  <BsChevronCompactLeft />
+                </button>
+              )}
               <div
                 className="intCarousel"
                 ref={(el) => (carouselRefs.current[0] = el)}
-                style={{
-                  display: "flex",
-                  overflow: "hidden",
-                  width: "100%",
-                }}
+                style={{ display: "flex", width: "100%" }}
               >
                 {intSeriesList.map((item) => (
                   <div
@@ -97,9 +139,7 @@ const IntSeriesList = ({ onNavigate }) => {
                         ) : (
                           <div className="image-placeholder"></div>
                         )}
-                        {item.isNew && (
-                          <span className="newLabel">Recently Added</span>
-                        )}
+                        {item.isNew && <span className="newLabel">Recently Added</span>}
                         <div className="artContent">
                           <h4 className="artTitle">{item.title}</h4>
                         </div>
@@ -108,13 +148,11 @@ const IntSeriesList = ({ onNavigate }) => {
                   </div>
                 ))}
               </div>
-              {/* Optional Carousel Arrows (Uncomment if needed) */}
-              {/* <button className="arrow left" onClick={() => scrollCarousel(-1, 0)}>
-                <BsChevronCompactLeft />
-              </button>
-              <button className="arrow right" onClick={() => scrollCarousel(1, 0)}>
-                <BsChevronCompactRight />
-              </button> */}
+              {showArrows.right && (
+                <button className="arrow right react-multiple-carousel__arrow" onClick={() => scrollCarousel(1, 0)}>
+                  <BsChevronCompactRight />
+                </button>
+              )}
             </div>
           </div>
         </div>
