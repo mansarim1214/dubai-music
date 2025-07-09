@@ -20,80 +20,90 @@ const Musicians = ({ onNavigate }) => {
 
 
 
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch data
+      const categoriesResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/categories`);
+      const artistsResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/artists`);
+      
+      // Process data
+      const fetchedCategories = categoriesResponse.data;
+      const fetchedArtists = artistsResponse.data.filter(artist => artist.isPublished === "published");
+      const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
- useEffect(() => {
-    const fetchData = async () => {
-      const manualArtistOrder = {
-        Singers: ["Jerome Deligero", "Emily Peacock", "Toi Dupras", "Yvonne Park", "Matt Palmer", "Lina Ammor- Jevtic", "Eirini Devitt", "Juan Pablo Pellicer", "Nick Pritchard", "Mostafa Sattar", "Jin Flora", "Robbi McFaulds"],
-        DJ: ["Dadou", "Elena", "Yana Kulyk", "Raphy J", "DJ Stylez", "DJ Melyna"],
-        Musicians: ["Ksenia Kot", "Jose Ramon Nunez", "Soren Lyng Hansen", "Tatiana Durova", "Aleksandra Dudek", "Ulyana Goncharova"],
-        Trending: ["Carrie Gibson’s NuvoSoul", "Jaymie Deville", "Chelsey Chantelle", "Golden Collective", "Abdallah Seleem", "Dany Echemendia", "Marvin Lee"],
-      };
-  
-      try {
-        setLoading(true);
-        const categoriesResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/categories`);
-        let fetchedCategories = categoriesResponse.data;
-  
-        const artistsResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/artists`);
-        let fetchedArtists = artistsResponse.data.filter(artist => artist.isPublished === "published");
-  
-        // Load favorites from localStorage
-        const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
-        
-        // Define shuffle function
-        const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);
-  
-        // Check if shuffle has already happened
-        const hasShuffled = localStorage.getItem("hasShuffled");
-  
-        // Define the desired order with Trending fixed at the top
-        let sortedCategories = fetchedCategories.sort((a, b) => {
-          if (a.name === "Trending") return -1;
-          if (b.name === "Trending") return 1;
-          return 0;
-        });
-  
-        // Shuffle categories except Trending **only once**
-        if (!hasShuffled) {
-          const categoriesToShuffle = sortedCategories.filter(cat => cat.name !== "Trending");
-          sortedCategories = [
-            sortedCategories.find(cat => cat.name === "Trending"),
-            ...shuffleArray(categoriesToShuffle)
-          ];
-          localStorage.setItem("hasShuffled", "true"); // Mark shuffle as done
+      // Fisher-Yates shuffle function
+      const shuffleArray = (array) => {
+        const newArray = [...array];
+        for (let i = newArray.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
         }
-  
-        // Group and shuffle artists within categories
-        const groupedArtists = {};
-        sortedCategories.forEach(category => {
-          let sortedArtists = fetchedArtists.filter(artist => artist.category === category.name).map(artist => ({
+        return newArray;
+      };
+
+      // Check if we need to reshuffle (weekly)
+      const lastShuffleKey = `lastShuffle_${fetchedCategories.map(c => c._id).join('_')}`;
+      const lastShuffleTime = localStorage.getItem(lastShuffleKey);
+      const oneWeek = 7 * 24 * 60 * 60 * 1000;
+      const shouldShuffle = !lastShuffleTime || (Date.now() - lastShuffleTime) > oneWeek;
+
+      // Get or create shuffled order
+      let shuffledArtistsByCategory = JSON.parse(localStorage.getItem("shuffledArtists")) || {};
+      
+      // Sort categories with Trending first
+      const sortedCategories = [...fetchedCategories].sort((a, b) => 
+        a.name === "Trending" ? -1 : b.name === "Trending" ? 1 : 0
+      );
+
+      // Process each category
+      const result = {};
+      for (const category of sortedCategories) {
+        let categoryArtists = fetchedArtists
+          .filter(artist => artist.category === category.name)
+          .map(artist => ({
             ...artist,
-            isFavorite: storedFavorites.some(fav => fav._id === artist._id),
+            isFavorite: storedFavorites.some(fav => fav._id === artist._id)
           }));
-  
-          // Keep manual sorting for Trending
-          if (category.name === "Trending") {
-            sortedArtists = sortedArtists.sort((a, b) => manualArtistOrder["Trending"].indexOf(a.title) - manualArtistOrder["Trending"].indexOf(b.title));
-          } else if (!hasShuffled) {
-            sortedArtists = shuffleArray(sortedArtists);
-          }
-  
-          groupedArtists[category.name] = sortedArtists;
-        });
-  
-        setCategories(sortedCategories);
-        setArtistsByCategory(groupedArtists);
-        setFavorites(storedFavorites);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
+
+        // Apply shuffle if needed
+        if (shouldShuffle || !shuffledArtistsByCategory[category.name]) {
+          categoryArtists = shuffleArray(categoryArtists);
+          shuffledArtistsByCategory[category.name] = categoryArtists.map(a => a._id);
+        } else {
+          // Use stored shuffle order
+          const orderedIds = shuffledArtistsByCategory[category.name] || [];
+          const artistMap = new Map(categoryArtists.map(a => [a._id, a]));
+          categoryArtists = orderedIds.map(id => artistMap.get(id)).filter(Boolean);
+          
+          // Add any new artists that weren't in the original shuffle
+          const newArtists = categoryArtists.filter(a => !orderedIds.includes(a._id));
+          categoryArtists = [...categoryArtists.filter(Boolean), ...newArtists];
+        }
+
+        result[category.name] = categoryArtists;
       }
-    };
-  
-    fetchData();
-  }, []);
+
+      // Save if we shuffled
+      if (shouldShuffle) {
+        localStorage.setItem(lastShuffleKey, Date.now().toString());
+        localStorage.setItem("shuffledArtists", JSON.stringify(shuffledArtistsByCategory));
+      }
+
+      setCategories(sortedCategories);
+      setArtistsByCategory(result);
+      setFavorites(storedFavorites);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+}, []);
 
 
 
