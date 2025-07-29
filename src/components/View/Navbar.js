@@ -120,7 +120,7 @@ const Navbar = ({ handleShow }) => {
               className="nav-link"
               onClick={closeSidebar}
             >
-              Musicians
+             Book Musicians
             </NavLink>
           </li>
 
