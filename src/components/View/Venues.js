@@ -7,6 +7,8 @@ import { BsChevronCompactRight, BsChevronCompactLeft } from "react-icons/bs";
 import Banner from "./Banner";
 import { Link } from "react-router-dom";
 //import WelcomeModal from "./WelcomeModal";
+import Newsletter from "./Newsletter";
+
 import "./frontend.css";
 
 gsap.registerPlugin(Draggable);
@@ -155,6 +157,8 @@ const categoryOrder = getCategoryOrder();
   return (
     <div className="bg-custom">
     {/*  <WelcomeModal /> */}
+
+     <Newsletter />
 
       <div className="container-fluid p-0">
         <Banner />

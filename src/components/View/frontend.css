@@ -819,6 +819,21 @@ body.coming-soon-page footer {
  .venue-detail .intseries-title {
     font-size: 40px !important;
   }
+
+  .modal-content{
+    padding: 40px 20px !important;
+  }
+
+  .custom-modal{
+  margin: 0 !important;
+}
+
+.custom-modal .modal-header {
+  
+    right: 0px !important;
+    top: 0px !important;
+
+}
 }
 
 .logo-carousel {
@@ -933,3 +948,74 @@ body.coming-soon-page footer {
   border-radius: 25px;
   padding: 8px;
 }
+
+/* Newsletter Modal  */
+
+.modal-content {
+      background-color: black !important;
+    padding: 60px;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px #5e5e5e4d;
+}
+/* EmailPopup.css */
+.custom-modal{
+      max-width: 650px !important;
+    width: 100% !important;
+
+}
+/* EmailPopup.css */
+.custom-modal .btn-close {
+  filter: invert(1); /* Makes white on dark background */
+  opacity: 1;
+}
+
+.custom-modal .modal-header{
+  border: 0;
+   position: absolute;
+  right: 6px;
+    top: 6px;
+}
+
+.custom-modal{
+  height: 400px;     /* set height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+}
+
+.custom-modal .modal-body{
+      background-color: white;
+    color: #4d4c4c;
+}
+.custom-modal .modal-title img{
+  border: 10px solid white;
+      height: 182px;
+    object-fit: contain;
+}
+
+.custom-modal .modal-body p{
+      font-size: 22px;
+    font-weight: 600;
+}
+.btn-dark {
+  background-color: #6b3fa0;
+  border: none;
+}
+
+.custom-modal .modal-body h4{
+      font-weight: 600;
+    font-size: 18px;
+    background-color: #703884;
+    color: white;
+    display: inline;
+    padding: 5px 10px;
+    letter-spacing: 3px;
+}
+
+.custom-modal input, .custom-modal .submit{
+  border: 1px solid black;
+  border-radius: 0;
+}
+

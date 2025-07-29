@@ -327,31 +327,8 @@ input[type="checkbox"] {
 }
 
 /* Custom Modal Styling */
-.modal-content {
-  background-color: #000 !important; /* Black background */
-  color: #fff !important; /* White text color */
-  border-radius: 10px; /* Rounded corners */
-  padding: 20px;
-}
 
-.modal-header {
-  border-bottom: none !important; /* Remove the bottom border */
-}
 
-.modal-title {
-  font-size:30px; /* Larger title font size */
-  font-weight: bold; /* Bold title text */
-  margin-top: -40px;
-}
-
-.modal-body {
-  padding: 20px 10px !important; /* Padding for the modal body */
-}
-
-.modal-footer {
-  border-top: none !important; /* Remove the top border */
-  justify-content: center !important; /* Align the button to the right */
-}
 
 
 
@@ -369,48 +346,3 @@ input[type="checkbox"] {
 }
 
 
-
-
-.modal-open{
-  padding-right: 0 !important;
-}
-
-.modal-backdrop{
-  z-index: 9 !important;
-  background-color: #ffffff3b !important;
-}
-#instantBookModal{
-  top: 15%;
-  padding-right: 0 !important;
-}
-
-.modal-dialog{
-  --bs-modal-width: 630px;
-}
-
-/* Custom CSS to make the modal close button white */
-.modal-header .btn-close {
-  filter: invert(1); /* Inverts colors, making dark elements light */
-}
-
-/* If you want to ensure it's pure white without inverting */
-.modal-header .btn-close {
-  background-color: transparent; /* Remove any background */
-  opacity: 1; /* Ensure full opacity */
-}
-
-.modal-header .btn-close::before {
-  color: white; /* Color of the close icon */
-}
-
-.offcanvas-header{
-  justify-content: flex-end;
-}
-
-.close{
-  color: white;
-  background-color: transparent;
-  border: none;
-  font-size: 40px;
-  padding: 0 10px;
-}
