@@ -12,10 +12,19 @@ const Newsletter = () => {
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState("");
 
-    useEffect(() => {
-        const timer = setTimeout(() => setShow(true), 2000); 
-        return () => clearTimeout(timer);
-    }, []);
+useEffect(() => {
+  const hasShownPopup = sessionStorage.getItem("newsletter-shown");
+
+  if (!hasShownPopup) {
+    const timer = setTimeout(() => {
+      setShow(true);
+      sessionStorage.setItem("newsletter-shown", "true");
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }
+}, []);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();

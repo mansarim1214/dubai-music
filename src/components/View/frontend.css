@@ -781,6 +781,9 @@ body.coming-soon-page footer {
     width: 180px;
     font-size: 14px;
   }
+
+ 
+
 }
 
 @media only screen and (max-width: 500px) {
@@ -834,11 +837,27 @@ body.coming-soon-page footer {
     top: 0px !important;
 
 }
+
+.custom-modal .modal-body p {
+    font-size: 16px !important;
+
+}
+
+ .custom-modal .modal-title img {
+    
+    height: 115px !important;
+    
+}
+
+.custom-modal .modal-body h4{
+  font-size: 12px !important;
+}
+
 }
 
 .logo-carousel {
   margin-top: 100px;
-  overflow: hidden; /* Ensures only visible logos show */
+  overflow: hidden; 
   white-space: nowrap;
   position: relative;
 }
@@ -991,12 +1010,12 @@ body.coming-soon-page footer {
 }
 .custom-modal .modal-title img{
   border: 10px solid white;
-      height: 182px;
-    object-fit: contain;
+  height: 146px;
+  object-fit: contain;
 }
 
 .custom-modal .modal-body p{
-      font-size: 22px;
+    font-size: 22px;
     font-weight: 600;
 }
 .btn-dark {
