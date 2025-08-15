@@ -5,13 +5,14 @@ import './frontend.css'; // Import CSS file
 const Banner = () => {
   const slides = [
     
-    {
-      src: '/banner1.webp',
-      alt: 'Banner for Musicians',
-      text: 'Explore Dubai’s Top Musicians',
-      button: 'Explore Now',
-      url: '/musicians',
-    },
+  {
+      src: '/banner2.webp',
+      alt: 'Banner for Venues',
+      text: 'Discover Live Music Venues',
+      button: 'Explore Venues',
+      url: '/venues',
+      class: 'center',
+},    
    
     {
       src: '/dubai-opera.webp',
@@ -47,14 +48,15 @@ const Banner = () => {
       class: 'contain',
       btnClass:'custom',
 },  
-{
-      src: '/banner2.webp',
-      alt: 'Banner for Venues',
-      text: 'Discover Live Music Venues',
-      button: 'Explore Venues',
-      url: '#venues',
-      class: 'center',
-},    
+
+
+  {
+      src: '/banner1.webp',
+      alt: 'Banner for Musicians',
+      text: 'Explore Dubai’s Top Musicians',
+      button: 'Explore Now',
+      url: '#musicians',
+    },
 
 
   ];

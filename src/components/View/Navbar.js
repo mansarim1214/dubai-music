@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { NavLink } from "react-router-dom";
-import "./Navbar.css"; // Assuming you have styles for the sidebar and overlay
-import { BsInstagram, BsFacebook } from "react-icons/bs";
+import "./Navbar.css"; 
+import { BsInstagram, BsFacebook, BsTiktok, BsWhatsapp,  } from "react-icons/bs";
 import { Link } from "react-router-dom";
 // import InstantBookModal from "./InstantBookModal"; 
 
@@ -45,6 +45,17 @@ const Navbar = ({ handleShow }) => {
             alt="Logo"
           />
         </a>
+
+<div className="d-flex d-none d-md-flex">
+   <div className="social-icons">
+          <Link to="https://www.instagram.com/dubaimusic" target="_blank"> <BsInstagram /> </Link>
+          <Link to="https://www.facebook.com/dubaimusic.comm" target="_blank"><BsFacebook /></Link>
+          <Link to="https://www.tiktok.com/@dxbmusic?lang=en" target="_blank"><BsTiktok /></Link>
+          <Link to="http://wa.me/971585568742" target="_blank"><BsWhatsapp /></Link>
+
+    </div>
+</div>
+
        
 
         <div className="d-flex">
@@ -57,21 +68,7 @@ const Navbar = ({ handleShow }) => {
               <span className="bar"></span>
             </div>
           </div>
-          {/* Toggle iCON */}
-
-          {/* <ul>
-            <li className="instant-btn">
-              <button
-                type="button"
-                className="btn homeBtn"
-                data-bs-toggle="modal"
-                data-bs-target="#instantBookModal"
-              >
-                Instant Book
-              </button>
-            </li>
-          </ul>
-          <InstantBookModal /> */}
+          
         </div>
 
       </nav>
@@ -116,11 +113,11 @@ const Navbar = ({ handleShow }) => {
           <li className="nav-item">
             <NavLink
               exact="true"
-              to="/musicians"
+              to="/venues"
               className="nav-link"
               onClick={closeSidebar}
             >
-             Book Musicians
+            Discover Live Music Venues
             </NavLink>
           </li>
 
@@ -179,13 +176,10 @@ const Navbar = ({ handleShow }) => {
           </li>
 
           <div className="social-icons">
-            <Link to="https://www.instagram.com/dubaimusic" target="_blank">
-              {" "}
-              <BsInstagram />{" "}
-            </Link>
-            <Link to="https://www.facebook.com/dubaimusic.comm" target="_blank">
-              <BsFacebook />
-            </Link>
+            <Link to="https://www.instagram.com/dubaimusic" target="_blank"> <BsInstagram /> </Link>
+                                <Link to="https://www.facebook.com/dubaimusic.comm" target="_blank"><BsFacebook /></Link>
+                                <Link to="https://www.tiktok.com/@dxbmusic?lang=en" target="_blank"><BsTiktok /></Link>
+                                <Link to="http://wa.me/971585568742" target="_blank"><BsWhatsapp /></Link>
             
           </div>
           

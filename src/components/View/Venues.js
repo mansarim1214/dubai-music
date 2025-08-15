@@ -4,11 +4,6 @@ import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { BsFillGeoAltFill } from "react-icons/bs";
 import { BsChevronCompactRight, BsChevronCompactLeft } from "react-icons/bs";
-import Banner from "./Banner";
-import { Link } from "react-router-dom";
-//import WelcomeModal from "./WelcomeModal";
-import Newsletter from "./Newsletter";
-
 import "./frontend.css";
 
 gsap.registerPlugin(Draggable);
@@ -18,6 +13,8 @@ const Venues = ({ onNavigate }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const carouselRefs = useRef([]);
+
+
 
   useEffect(() => {
     const fetchVenues = async () => {
@@ -158,10 +155,14 @@ const categoryOrder = getCategoryOrder();
     <div className="bg-custom">
     {/*  <WelcomeModal /> */}
 
-     <Newsletter />
+ 
+
+    
 
       <div className="container-fluid p-0">
-        <Banner />
+       
+
+        
 
         {Object.keys(groupedVenues).map((category, index) => {
           const carousel = carouselRefs.current[index];

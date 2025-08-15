@@ -11,6 +11,7 @@ import ManageWeddingVip from "./ManageWeddingVip";
 import AddWeddingVip from "./AddWeddingVip";
 import AddIntSeries from "./AddIntSeries";
 import ManageIntSeries from "./ManageIntSeries";
+import ManageMedia from "./ManageMedia";
 
 const Dashboard = () => {
   const [selectedComponent, setSelectedComponent] = useState(null);
@@ -279,6 +280,15 @@ const Dashboard = () => {
   </div>
 </li>
 
+<li className="nav-item">
+  <Link
+            className="nav-link"
+            onClick={() => handleComponentSelect("manageMedia")}
+          >
+            Manage Media
+          </Link>
+</li>
+
               </ul>
             </div>
           </nav>
@@ -297,6 +307,7 @@ const Dashboard = () => {
             {selectedComponent === "manageWeddingVip" && <ManageWeddingVip />}
             {selectedComponent === "addIntSer" && <AddIntSeries />}
             {selectedComponent === "manageIntSer" && <ManageIntSeries />}         
+            {selectedComponent === "manageMedia" && <ManageMedia />}         
 
 
  </main>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import Banner from "./Banner";
 import { BsHeartFill } from "react-icons/bs";
 import { BsChevronCompactRight, BsChevronCompactLeft } from "react-icons/bs";
 import { gsap } from "gsap";
@@ -224,7 +225,7 @@ useEffect(() => {
     <div className="mainFront">
 
       <div className="container-fluid p-0" >
-
+ <Banner />
 
         {categories
           .filter(

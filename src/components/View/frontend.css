@@ -19,6 +19,13 @@ body {
   min-height: 100vh;
 }
 
+.close{
+      background-color: transparent;
+    color: white;
+    border: none;
+    font-size: 35px;
+}
+
 .heroSection p {
   color: #ffffff;
   font-size: 22px;

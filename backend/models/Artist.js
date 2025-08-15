@@ -8,11 +8,9 @@ const artistSchema = new mongoose.Schema({
   videoUrl: { type: String, required: false },
   audioUrl: { type: String, required: false },
   imageUrl: { type: String, required: true },
-  galleryImages: [{ type: String }], // Array to store gallery image URLs
-  isPublished: { type: String, default: 'published' }, // Add the status field
- 
+  galleryImages: [{ type: String }],
+  isPublished: { type: String, default: 'published' },
 });
 
-const Artist = mongoose.model('Artist', artistSchema);
-
-module.exports = Artist;
+// Use existing model if already compiled
+module.exports = mongoose.models.Artist || mongoose.model('Artist', artistSchema);

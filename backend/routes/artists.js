@@ -1,24 +1,25 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const mongoose = require('mongoose');
+const Artist = require('../models/Artist');
+
 
 // Mongoose schema definition
-const artistSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  category: { type: String, required: true },
-  speciality: { type: String, required: true },
-  description: { type: String },
-  videoUrl: { type: String },
-  audioUrl: { type: String },
-  imageUrl: { type: String, required: true },
-  galleryImages: [{ type: String }], // Array to store multiple image paths
-  isPublished: { type: String, default: 'published' }, // Add the status field
+// const artistSchema = new mongoose.Schema({
+//   title: { type: String, required: true },
+//   category: { type: String, required: true },
+//   speciality: { type: String, required: true },
+//   description: { type: String },
+//   videoUrl: { type: String },
+//   audioUrl: { type: String },
+//   imageUrl: { type: String, required: true },
+//   galleryImages: [{ type: String }], // Array to store multiple image paths
+//   isPublished: { type: String, default: 'published' }, // Add the status field
 
-});
+// });
 
 // Mongoose model definition
-const Artist = mongoose.model('Artist', artistSchema);
+// const Artist = mongoose.model('Artist', artistSchema);
 
 // Multer storage setup
 const storage = multer.diskStorage({

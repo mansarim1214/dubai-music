@@ -3,21 +3,24 @@ const router = express.Router();
 const multer = require('multer');
 const mongoose = require('mongoose');
 
+const WeddingVIP = require('../models/WeddingVip');
+
+
 // Mongoose schema definition
-const weddingvipSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String },
-  videoUrl: { type: String },
-  imageUrl: { type: String, required: true },
-  galleryImages: [{ type: String }], // Array to store multiple image paths
-  category: { type: String, required: true }, // New category field
-  isPublished: { type: String}, // Add the status field
+// const weddingvipSchema = new mongoose.Schema({
+//   title: { type: String, required: true },
+//   description: { type: String },
+//   videoUrl: { type: String },
+//   imageUrl: { type: String, required: true },
+//   galleryImages: [{ type: String }], // Array to store multiple image paths
+//   category: { type: String, required: true }, // New category field
+//   isPublished: { type: String}, // Add the status field
 
 
-});
+// });
 
 // Mongoose model definition
-const WeddingVIP = mongoose.model('WeddingVip', weddingvipSchema);
+// const WeddingVIP = mongoose.model('WeddingVip', weddingvipSchema);
 
 // Multer storage setup
 const storage = multer.diskStorage({

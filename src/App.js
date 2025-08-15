@@ -1,3 +1,5 @@
+import * as Sentry from "@sentry/react";
+
 import React, { useState, useEffect, Suspense } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./components/View/Navbar";
@@ -5,6 +7,7 @@ import Footer from "./components/View/Footer";
 import ComingSoon from "./components/View/ComingSoon";
 import { AuthProvider } from "./context/AuthContext";
 import LoadingBar from "react-top-loading-bar";
+// import LogoIntro from "./components/View/LogoIntro";
 import "./App.css";
 import "./index.css";
 
@@ -12,6 +15,8 @@ import CacheBuster from 'react-cache-buster';
 import pkg from '../package.json';
 const version = pkg.version;
 // import Loading from './loading';
+
+
 
 // Lazy-loaded components
 const Musicians = React.lazy(() => import("./components/View/Musicians"));
@@ -33,6 +38,16 @@ const IntSeriesDetail = React.lazy(() => import("./components/View/IntSeriesDeta
 
 
 const App = () => {
+
+  Sentry.init({
+  dsn: "https://a5588a00d086e9fb57a398ff668f0ce4@o4509755249721344.ingest.us.sentry.io/4509755250769920",
+  // Setting this option to true will send default PII data to Sentry.
+  // For example, automatic IP address collection on events
+  sendDefaultPii: true
+});
+
+
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -64,6 +79,23 @@ const App = () => {
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+const [showIntro, setShowIntro] = useState(true);
+
+
+
+//  useEffect(() => {
+//   const hasSeenIntro = sessionStorage.getItem("seenIntro");
+//   if (hasSeenIntro) {
+//     setShowIntro(false);
+//   } else {
+//     sessionStorage.setItem("seenIntro", "true");
+//   }
+// }, []);
+
+//  if (showIntro) {
+//     return <LogoIntro onFinish={() => setShowIntro(false)} />;
+//   }
+
   return (
      <CacheBuster
       currentVersion={version}
@@ -89,7 +121,9 @@ const isProduction = process.env.NODE_ENV === 'production';
         <Suspense fallback={<div></div>}>
           <div className="content">
             <Routes>
-              <Route path="/" element={<Venues onNavigate={handleNavigate} />} />
+       
+              <Route path="/" element={<Musicians onNavigate={handleNavigate} />} />
+              <Route path="/venues" element={<Venues onNavigate={handleNavigate} />} />
               <Route path="/musicians" element={<Musicians onNavigate={handleNavigate} />} />
               <Route path="/coming-soon" element={<ComingSoon onNavigate={handleNavigate} />} />
               <Route path="/login" element={<Login onNavigate={handleNavigate} />} />
@@ -97,7 +131,6 @@ const isProduction = process.env.NODE_ENV === 'production';
               <Route path="/unauthorized" element={<Unauthorized onNavigate={handleNavigate} />} />
               <Route path="/artist/:id" element={<ArtistDetail onNavigate={handleNavigate} />} />
               <Route path="/favorites" element={<Favorites onNavigate={handleNavigate} />} />
-              <Route path="/venues" element={<Venues onNavigate={handleNavigate} />} />
               <Route path="/wedding-vip-packages" element={<WeddingVIP onNavigate={handleNavigate} />} />
               <Route path="/venuedetail/:id" element={<VenueDetail onNavigate={handleNavigate} />} />
               <Route path="/music-store/:id" element={<StoreDetail onNavigate={handleNavigate} />} />
