@@ -2,12 +2,19 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const userRoute = require('./routes/user');
+const manageMediaRoutes = require('./routes/manageMedia');
 
 
 const app = express();
+
+
 app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
+
+
+
+
 
 // Import routes
 const categoriesRoute = require('./routes/categories');
@@ -25,6 +32,8 @@ app.use('/api/venues', venuesRoute);
 app.use('/api/musicstore', musicStore);
 app.use('/api/weddingvip', weddingvip);
 app.use('/api/intseries', intseries)
+app.use('/api/media', manageMediaRoutes);
+
  
 
 mongoose.connect('mongodb+srv://mansarim:4TCOflsMWdI9CCkt@cluster0.fawjsqk.mongodb.net/dubaimusic', {
@@ -49,7 +58,7 @@ app.use(express.static('public', {
   }
 }));
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
