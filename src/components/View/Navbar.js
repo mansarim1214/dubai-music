@@ -35,6 +35,18 @@ const Navbar = ({ handleShow }) => {
   return (
     <>
       {/* Main Navbar */}
+<div class="topbar fixed-top bg-black text-white text-center py-2 d-md-none d-sm-block">
+  <div className="d-flex     justify-content-center">
+   <div className="social-icons">
+          <Link to="https://www.instagram.com/dubaimusic" target="_blank"> <BsInstagram /> </Link>
+          <Link to="https://www.facebook.com/dubaimusic.comm" target="_blank"><BsFacebook /></Link>
+          <Link to="https://www.tiktok.com/@dxbmusic?lang=en" target="_blank"><BsTiktok /></Link>
+          <Link to="http://wa.me/971585568742" target="_blank"><BsWhatsapp /></Link>
+
+    </div>
+</div>
+</div>
+
       <nav className="navbar fixed-top navbar-dark bg-black">
         
         <a className="navbar-brand" href="/">
