@@ -7,11 +7,12 @@ const Banner = () => {
     
   {
       src: '/banner2.webp',
-      alt: 'Banner for Venues',
-      text: 'Discover Live Music Venues',
-      button: 'Explore Venues',
-      url: '/venues',
+      alt: 'Banner for Coca Cola Arena',
+      text: '',
+      button: 'Book Now',
+      url: 'https://coca-cola-arena.com/music/1469/timbaland',
       class: 'center',
+      
 },    
    
     {
