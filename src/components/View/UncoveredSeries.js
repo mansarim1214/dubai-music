@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./frontend.css";
 
@@ -6,6 +7,8 @@ const UncoSeriesList = ({ onNavigate }) => {
   const [uncoSeriesList, setUncoSeriesList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+      const navigate = useNavigate();
+  
 
   useEffect(() => {
     const fetchUncoSeries = async () => {
@@ -24,16 +27,16 @@ const UncoSeriesList = ({ onNavigate }) => {
   }, []);
 
   const handleClick = (item) => {
-    if (onNavigate) {
-      onNavigate(`/uncoveredseries-detail/${item._id}`);
-    }
+   
+      navigate(`/uncoveredseries-detail/${item._id}`);
+    
   };
 
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error-message">{error}</div>;
 
   return (
-    <div className="bg-custom" >
+    <div className="bg-custom" id="uncovered-series" >
       <h2 className="my-2 fav-title">Uncovered Series</h2>
       <div className="container-fluid">
         <div className="storeGrid">
