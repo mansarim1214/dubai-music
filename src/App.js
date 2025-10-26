@@ -35,16 +35,17 @@ const WeddingVIP = React.lazy(() => import("./components/View/WeddingVIP"));
 const WeddingVIPDetail = React.lazy(() => import("./components/View/WeddingVipDetail"));
 const IntroducingSeries = React.lazy(() => import("./components/View/IntroducingSeries"));
 const IntSeriesDetail = React.lazy(() => import("./components/View/IntSeriesDetail"));
+const UncoSeriesDetail = React.lazy(() => import("./components/View/UncoSeriesDetail"));
 
 
 const App = () => {
 
   Sentry.init({
-  dsn: "https://a5588a00d086e9fb57a398ff668f0ce4@o4509755249721344.ingest.us.sentry.io/4509755250769920",
-  // Setting this option to true will send default PII data to Sentry.
-  // For example, automatic IP address collection on events
-  sendDefaultPii: true
-});
+    dsn: "https://a5588a00d086e9fb57a398ff668f0ce4@o4509755249721344.ingest.us.sentry.io/4509755250769920",
+    // Setting this option to true will send default PII data to Sentry.
+    // For example, automatic IP address collection on events
+    sendDefaultPii: true
+  });
 
 
 
@@ -77,78 +78,79 @@ const App = () => {
     }, 500); // Simulate loading completion
   }, [location.pathname]); // Run whenever the path changes (includes reloads)
 
-const isProduction = process.env.NODE_ENV === 'production';
+  const isProduction = process.env.NODE_ENV === 'production';
 
-const [showIntro, setShowIntro] = useState(true);
+  const [showIntro, setShowIntro] = useState(true);
 
 
 
-//  useEffect(() => {
-//   const hasSeenIntro = sessionStorage.getItem("seenIntro");
-//   if (hasSeenIntro) {
-//     setShowIntro(false);
-//   } else {
-//     sessionStorage.setItem("seenIntro", "true");
-//   }
-// }, []);
+  //  useEffect(() => {
+  //   const hasSeenIntro = sessionStorage.getItem("seenIntro");
+  //   if (hasSeenIntro) {
+  //     setShowIntro(false);
+  //   } else {
+  //     sessionStorage.setItem("seenIntro", "true");
+  //   }
+  // }, []);
 
-//  if (showIntro) {
-//     return <LogoIntro onFinish={() => setShowIntro(false)} />;
-//   }
+  //  if (showIntro) {
+  //     return <LogoIntro onFinish={() => setShowIntro(false)} />;
+  //   }
 
   return (
-     <CacheBuster
+    <CacheBuster
       currentVersion={version}
       isEnabled={isProduction} //If false, the library is disabled.
       isVerboseMode={false} //If true, the library writes verbose logs to console.
       // loadingComponent={<Loading />} //If not pass, nothing appears at the time of new version check.
       metaFileDirectory={'.'} //If public assets are hosted somewhere other than root on your server.
     >
-    <AuthProvider>
-      <div className="App">
-        {/* Top Loading Bar */}
-        <LoadingBar
-          color="#a96fff"
-          progress={progress}
-          height={5}
-          onLoaderFinished={() => setProgress(0)} // Reset progress
-        />
+      <AuthProvider>
+        <div className="App">
+          {/* Top Loading Bar */}
+          <LoadingBar
+            color="#a96fff"
+            progress={progress}
+            height={5}
+            onLoaderFinished={() => setProgress(0)} // Reset progress
+          />
 
-        {/* Navbar */}
-        {showHeaderFooter && <Navbar />}
+          {/* Navbar */}
+          {showHeaderFooter && <Navbar />}
 
-        {/* Content */}
-        <Suspense fallback={<div></div>}>
-          <div className="content">
-            <Routes>
-       
-              <Route path="/" element={<Musicians onNavigate={handleNavigate} />} />
-              <Route path="/venues" element={<Venues onNavigate={handleNavigate} />} />
-              <Route path="/musicians" element={<Musicians onNavigate={handleNavigate} />} />
-              <Route path="/coming-soon" element={<ComingSoon onNavigate={handleNavigate} />} />
-              <Route path="/login" element={<Login onNavigate={handleNavigate} />} />
-              <Route path="/dubaimusic-dashboard" element={<Dashboard onNavigate={handleNavigate} />} />
-              <Route path="/unauthorized" element={<Unauthorized onNavigate={handleNavigate} />} />
-              <Route path="/artist/:id" element={<ArtistDetail onNavigate={handleNavigate} />} />
-              <Route path="/favorites" element={<Favorites onNavigate={handleNavigate} />} />
-              <Route path="/wedding-vip-packages" element={<WeddingVIP onNavigate={handleNavigate} />} />
-              <Route path="/venuedetail/:id" element={<VenueDetail onNavigate={handleNavigate} />} />
-              <Route path="/music-store/:id" element={<StoreDetail onNavigate={handleNavigate} />} />
-              <Route path="/wedding-vip-packages/:id" element={<WeddingVIPDetail onNavigate={handleNavigate} />} />
-              <Route path="/jobs" element={<Jobs />} />
-              <Route path="/about" element={<About onNavigate={handleNavigate} />} />
-              <Route path="/music-store" element={<MusicStore onNavigate={handleNavigate} />} />
-<Route path="/introducing-series" element={<IntroducingSeries onNavigate={handleNavigate} />} />
-              <Route path="/introducingseries-detail/:id" element={<IntSeriesDetail onNavigate={handleNavigate} />} />           
+          {/* Content */}
+          <Suspense fallback={<div></div>}>
+            <div className="content">
+              <Routes>
 
- </Routes>
-          </div>
-        </Suspense>
+                <Route path="/" element={<Musicians onNavigate={handleNavigate} />} />
+                <Route path="/venues" element={<Venues onNavigate={handleNavigate} />} />
+                <Route path="/musicians" element={<Musicians onNavigate={handleNavigate} />} />
+                <Route path="/coming-soon" element={<ComingSoon onNavigate={handleNavigate} />} />
+                <Route path="/login" element={<Login onNavigate={handleNavigate} />} />
+                <Route path="/dubaimusic-dashboard" element={<Dashboard onNavigate={handleNavigate} />} />
+                <Route path="/unauthorized" element={<Unauthorized onNavigate={handleNavigate} />} />
+                <Route path="/artist/:id" element={<ArtistDetail onNavigate={handleNavigate} />} />
+                <Route path="/favorites" element={<Favorites onNavigate={handleNavigate} />} />
+                <Route path="/wedding-vip-packages" element={<WeddingVIP onNavigate={handleNavigate} />} />
+                <Route path="/venuedetail/:id" element={<VenueDetail onNavigate={handleNavigate} />} />
+                <Route path="/music-store/:id" element={<StoreDetail onNavigate={handleNavigate} />} />
+                <Route path="/wedding-vip-packages/:id" element={<WeddingVIPDetail onNavigate={handleNavigate} />} />
+                <Route path="/jobs" element={<Jobs />} />
+                <Route path="/about" element={<About onNavigate={handleNavigate} />} />
+                <Route path="/music-store" element={<MusicStore onNavigate={handleNavigate} />} />
+                <Route path="/introducing-series" element={<IntroducingSeries onNavigate={handleNavigate} />} />
+                <Route path="/introducingseries-detail/:id" element={<IntSeriesDetail onNavigate={handleNavigate} />} />
+                <Route path="/uncoveredseries-detail/:id" element={<UncoSeriesDetail onNavigate={handleNavigate} />} />
 
-        {/* Footer */}
-        {showHeaderFooter && <Footer />}
-      </div>
-    </AuthProvider>
+              </Routes>
+            </div>
+          </Suspense>
+
+          {/* Footer */}
+          {showHeaderFooter && <Footer />}
+        </div>
+      </AuthProvider>
 
     </CacheBuster>
   );

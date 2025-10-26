@@ -23,6 +23,7 @@ const venuesRoute = require('./routes/venues');
 const musicStore = require('./routes/musicstore');
 const weddingvip = require('./routes/weddingvip')
 const intseries = require('./routes/intseries');
+const uncoseries = require('./routes/uncoseries');
 
 
 // Use routes
@@ -32,6 +33,7 @@ app.use('/api/venues', venuesRoute);
 app.use('/api/musicstore', musicStore);
 app.use('/api/weddingvip', weddingvip);
 app.use('/api/intseries', intseries)
+app.use('/api/uncoseries', uncoseries)
 app.use('/api/media', manageMediaRoutes);
 
  
@@ -58,7 +60,7 @@ app.use(express.static('public', {
   }
 }));
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

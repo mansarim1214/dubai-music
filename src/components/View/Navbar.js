@@ -35,7 +35,7 @@ const Navbar = ({ handleShow }) => {
   return (
     <>
       {/* Main Navbar */}
-<div class="topbar fixed-top bg-black text-white text-center py-2 d-md-none d-sm-block">
+<div className="topbar fixed-top bg-black text-white text-center py-2 d-md-none d-sm-block">
   <div className="d-flex     justify-content-center">
    <div className="social-icons">
           <Link to="https://www.instagram.com/dubaimusic" target="_blank"> <BsInstagram /> </Link>
@@ -155,16 +155,7 @@ const Navbar = ({ handleShow }) => {
             </NavLink>
           </li>
           
-          {/* <li className="nav-item">
-            <NavLink to="https://jobs.dubaimusic.com" className="nav-link" onClick={closeSidebar}>
-              Jobs
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink to="https://jobs.dubaimusic.com/submit-job/" className="nav-link" onClick={closeSidebar}>
-              Post a Job
-            </NavLink>
-          </li> */}
+        
           <li className="nav-item">
             <NavLink to="/music-store" className="nav-link"  onClick={closeSidebar}>
             Music Store

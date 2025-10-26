@@ -13,6 +13,7 @@ background:white;
     width: inherit;
     text-align: left;
     padding-top: 100px;
+    overflow-y: auto;
   }
   
   main{

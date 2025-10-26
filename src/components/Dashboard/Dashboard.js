@@ -12,6 +12,9 @@ import AddWeddingVip from "./AddWeddingVip";
 import AddIntSeries from "./AddIntSeries";
 import ManageIntSeries from "./ManageIntSeries";
 import ManageMedia from "./ManageMedia";
+import AddUncoSeries from "./AddUncoSeries";
+import ManageUncoSeries from "./ManageUncoSeries";
+
 
 const Dashboard = () => {
   const [selectedComponent, setSelectedComponent] = useState(null);
@@ -199,95 +202,134 @@ const Dashboard = () => {
                   </div>
                 </li>
 
-             
 
 
-<li className="nav-item">
-  <div className="accordion" id="accordionStore">
-    <div className="accordion-item">
-      <button
-        className="accordion-button"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#collapseStore"
-        aria-expanded="true"
-        aria-controls="collapseStore"
-      >
-        Music Store
-      </button>
 
-      <div
-        id="collapseStore"
-        className="accordion-collapse collapse"
-        aria-labelledby="headingStore"
-        data-bs-parent="#accordionStore"
-      >
-        <div className="accordion-body">
-          <Link
-            className="nav-link"
-            onClick={() => handleComponentSelect("addStore")}
-          >
-            Add Store
-          </Link>
-          <Link
-            className="nav-link"
-            onClick={() => handleComponentSelect("manageMusicStore")}
-          >
-            Manage Stores
-          </Link>
-        </div>
-      </div>
-    </div>
-  </div>
-</li>
+                <li className="nav-item">
+                  <div className="accordion" id="accordionStore">
+                    <div className="accordion-item">
+                      <button
+                        className="accordion-button"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseStore"
+                        aria-expanded="true"
+                        aria-controls="collapseStore"
+                      >
+                        Music Store
+                      </button>
 
-<li className="nav-item">
-  <div className="accordion" id="accordionIntSer">
-    <div className="accordion-item">
-      <button
-        className="accordion-button"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#collapseIntSer"
-        aria-expanded="true"
-        aria-controls="collapseIntSer"
-      >
-        Introducing Series
-      </button>
+                      <div
+                        id="collapseStore"
+                        className="accordion-collapse collapse"
+                        aria-labelledby="headingStore"
+                        data-bs-parent="#accordionStore"
+                      >
+                        <div className="accordion-body">
+                          <Link
+                            className="nav-link"
+                            onClick={() => handleComponentSelect("addStore")}
+                          >
+                            Add Store
+                          </Link>
+                          <Link
+                            className="nav-link"
+                            onClick={() => handleComponentSelect("manageMusicStore")}
+                          >
+                            Manage Stores
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
 
-      <div
-        id="collapseIntSer"
-        className="accordion-collapse collapse"
-        aria-labelledby="headingIntSer"
-        data-bs-parent="#accordionIntSer"
-      >
-        <div className="accordion-body">
-          <Link
-            className="nav-link"
-            onClick={() => handleComponentSelect("addIntSer")}
-          >
-            Add Introducing Series
-          </Link>
-          <Link
-            className="nav-link"
-            onClick={() => handleComponentSelect("manageIntSer")}
-          >
-            Manage Introducing Series
-          </Link>
-        </div>
-      </div>
-    </div>
-  </div>
-</li>
+                <li className="nav-item">
+                  <div className="accordion" id="accordionIntSer">
+                    <div className="accordion-item">
+                      <button
+                        className="accordion-button"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseIntSer"
+                        aria-expanded="true"
+                        aria-controls="collapseIntSer"
+                      >
+                        Introducing Series
+                      </button>
 
-<li className="nav-item">
-  <Link
-            className="nav-link"
-            onClick={() => handleComponentSelect("manageMedia")}
-          >
-            Manage Media
-          </Link>
-</li>
+                      <div
+                        id="collapseIntSer"
+                        className="accordion-collapse collapse"
+                        aria-labelledby="headingIntSer"
+                        data-bs-parent="#accordionIntSer"
+                      >
+                        <div className="accordion-body">
+                          <Link
+                            className="nav-link"
+                            onClick={() => handleComponentSelect("addIntSer")}
+                          >
+                            Add Introducing Series
+                          </Link>
+                          <Link
+                            className="nav-link"
+                            onClick={() => handleComponentSelect("manageIntSer")}
+                          >
+                            Manage Introducing Series
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+
+                <li className="nav-item">
+                  <div className="accordion" id="accordionUncoSer">
+                    <div className="accordion-item">
+                      <button
+                        className="accordion-button"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseUncoSer"
+                        aria-expanded="true"
+                        aria-controls="collapseUncoSer"
+                      >
+                        Uncovered Series
+                      </button>
+
+                      <div
+                        id="collapseUncoSer"
+                        className="accordion-collapse collapse"
+                        aria-labelledby="headingUncoSer"
+                        data-bs-parent="#accordionUncoSer"
+                      >
+                        <div className="accordion-body">
+                          <Link
+                            className="nav-link"
+                            onClick={() => handleComponentSelect("addUncoSer")}
+                          >
+                            Add Uncovered Series
+                          </Link>
+                          <Link
+                            className="nav-link"
+                            onClick={() => handleComponentSelect("manageUncoSer")}
+                          >
+                            Manage Uncovered Series
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    onClick={() => handleComponentSelect("manageMedia")}
+                  >
+                    Manage Media
+                  </Link>
+                </li>
 
               </ul>
             </div>
@@ -306,11 +348,13 @@ const Dashboard = () => {
             {selectedComponent === "manageMusicStore" && <ManageMusicStore />}
             {selectedComponent === "manageWeddingVip" && <ManageWeddingVip />}
             {selectedComponent === "addIntSer" && <AddIntSeries />}
-            {selectedComponent === "manageIntSer" && <ManageIntSeries />}         
-            {selectedComponent === "manageMedia" && <ManageMedia />}         
+            {selectedComponent === "manageIntSer" && <ManageIntSeries />}
+            {selectedComponent === "addUncoSer" && <AddUncoSeries />}
+            {selectedComponent === "manageUncoSer" && <ManageUncoSeries />}
+            {selectedComponent === "manageMedia" && <ManageMedia />}
 
 
- </main>
+          </main>
         </div>
       </div>
     </div>

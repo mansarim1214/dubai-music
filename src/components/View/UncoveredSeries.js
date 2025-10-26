@@ -1,32 +1,31 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./frontend.css";
-import UncoSeriesList from "./UncoveredSeries";
 
-const IntSeriesList = ({ onNavigate }) => {
-  const [intSeriesList, setIntSeriesList] = useState([]);
+const UncoSeriesList = ({ onNavigate }) => {
+  const [uncoSeriesList, setUncoSeriesList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchIntSeries = async () => {
+    const fetchUncoSeries = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/intseries`);
-        setIntSeriesList(response.data);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/uncoseries`);
+        setUncoSeriesList(response.data);
       } catch (error) {
-        setError("Failed to fetch IntSeries. Please try again later.");
-        console.error("Error fetching IntSeries:", error);
+        setError("Failed to fetch UncoSeries. Please try again later.");
+        console.error("Error fetching UncoSeries:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchIntSeries();
+    fetchUncoSeries();
   }, []);
 
   const handleClick = (item) => {
     if (onNavigate) {
-      onNavigate(`/introducingseries-detail/${item._id}`);
+      onNavigate(`/uncoveredseries-detail/${item._id}`);
     }
   };
 
@@ -34,11 +33,11 @@ const IntSeriesList = ({ onNavigate }) => {
   if (error) return <div className="error-message">{error}</div>;
 
   return (
-    <div className="bg-custom">
-      <h2 className="my-2 fav-title">Introducing Series</h2>
+    <div className="bg-custom" >
+      <h2 className="my-2 fav-title">Uncovered Series</h2>
       <div className="container-fluid">
         <div className="storeGrid">
-          {intSeriesList.map((item) => (
+          {uncoSeriesList.map((item) => (
             <div
               key={item._id}
               className="storeCard"
@@ -65,14 +64,8 @@ const IntSeriesList = ({ onNavigate }) => {
           ))}
         </div>
       </div>
-
-
-       <UncoSeriesList />
-
     </div>
-
-   
   );
 };
 
-export default IntSeriesList;
+export default UncoSeriesList;
