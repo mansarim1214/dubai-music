@@ -795,16 +795,16 @@ body.coming-soon-page footer {
 
 @media only screen and (max-width: 500px) {
   .carousel-slide img {
-    height: 365px; /* Adjust banner height for mobile devices */
+    height: 180px; /* Adjust banner height for mobile devices */
   }
   .carousel-text {
-    font-size: 32px; /* Adjust text size for mobile devices */
+    font-size: 20px; /* Adjust text size for mobile devices */
     padding: 10px 20px;
   }
   .carousel-btn {
-    width: 150px; /* Adjust button width for mobile devices */
-    padding: 10px;
-    font-size: 14px;
+    width: 112px; /* Adjust button width for mobile devices */
+    padding: 3px;
+    font-size: 12px;
     margin-top: 20px;
   }
   .logo-container {
