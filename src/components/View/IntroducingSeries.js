@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./frontend.css";
 import UncoSeriesList from "./UncoveredSeries";
@@ -7,6 +8,7 @@ const IntSeriesList = ({ onNavigate }) => {
   const [intSeriesList, setIntSeriesList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
   useEffect(() => {
     const fetchIntSeries = async () => {
@@ -25,9 +27,9 @@ const IntSeriesList = ({ onNavigate }) => {
   }, []);
 
   const handleClick = (item) => {
-    if (onNavigate) {
-      onNavigate(`/introducingseries-detail/${item._id}`);
-    }
+    
+      navigate(`/introducingseries-detail/${item._id}`);
+    
   };
 
   if (loading) return <div className="loading">Loading...</div>;

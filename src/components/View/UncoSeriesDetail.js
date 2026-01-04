@@ -25,7 +25,7 @@ const UncoSeriesDetail = ({ onNavigate }) => {
   const handleBack = () => {
     setProgress(50);
     if (onNavigate) {
-      onNavigate(`/introducing-series#uncovered`);
+      onNavigate(`/introducing-series#uncovered-series`);
     } else {
       navigate(-1);
     }

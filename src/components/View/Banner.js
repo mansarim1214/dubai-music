@@ -4,16 +4,7 @@ import './frontend.css'; // Import CSS file
 
 const Banner = () => {
   const slides = [
-    
-  {
-      src: '/banner2.webp',
-      alt: 'Banner for Coca Cola Arena',
-      text: '',
-      button: 'Book Now',
-      url: 'https://coca-cola-arena.com/music/1469/timbaland',
-      class: 'center',
       
-},    
    
     {
       src: '/dubai-opera.webp',
